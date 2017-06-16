@@ -10,16 +10,42 @@
 
 @interface PushViewController ()
 
+@property (nonatomic, strong) UIView *animationView;
+
+@property (nonatomic, strong) UIDynamicAnimator *animator;
+
 @end
 
 @implementation PushViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self defaultConfig];
+    [self createView];
 }
 
-- (void)buttonAction {
+- (void)defaultConfig {
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.animationView = [UIView new];
+    self.animationView.backgroundColor = [UIColor orangeColor];
+    self.animationView.frame = CGRectMake(0, 0, 100, 100);
+    self.animationView.center = CGPointMake(100, 300);
+    [self.view addSubview:self.animationView];
+    
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+}
+
+- (void)createView {
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(20, 80, 100, 40);
+    [btn setTitle:@"animate" forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(animate) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
+}
+
+- (void)animate {
     UIPushBehavior *push = [[UIPushBehavior alloc] initWithItems:@[self.animationView] mode:UIPushBehaviorModeInstantaneous];
     push.angle = 1.35;
     push.magnitude = 0.5;

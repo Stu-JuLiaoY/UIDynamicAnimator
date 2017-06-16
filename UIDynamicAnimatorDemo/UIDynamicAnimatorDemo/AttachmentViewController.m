@@ -18,9 +18,12 @@
 
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
     
+   
+    
     self.animationView = [UIView new];
     self.animationView.backgroundColor = [UIColor orangeColor];
-    self.animationView.frame = CGRectMake(100, 200, 100, 100);
+    self.animationView.frame = CGRectMake(0, 0, 100, 100);
+    self.animationView.center = CGPointMake(100, 100);
     [self.view addSubview:self.animationView];
     
     self.relyView = [UIView new];
@@ -31,37 +34,72 @@
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(20, 80, 100, 40);
-    [btn setTitle:@"To Anchor" forState:UIControlStateNormal];
+    [btn setTitle:@"leftAction" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [btn addTarget:self action:@selector(buttonAction) forControlEvents:UIControlEventTouchUpInside];
+    [btn addTarget:self action:@selector(leftAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn2.frame = CGRectMake(200, 80, 100, 60);
-    [btn2 setTitle:@"To other view" forState:UIControlStateNormal];
+    btn2.frame = CGRectMake(200, 80, 150, 40);
+    [btn2 setTitle:@"rightAction" forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [btn2 addTarget:self action:@selector(buttonAction2) forControlEvents:UIControlEventTouchUpInside];
+    [btn2 addTarget:self action:@selector(rightAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn2];
+    
+    self.attachment = [[UIAttachmentBehavior alloc] initWithItem:self.animationView attachedToAnchor:CGPointMake(200, 200)];
+    self.attachment.damping = 0.3f;
+    self.attachment.frequency = 5.f;
+    [self.animator addBehavior:self.attachment];
+    
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureAction:)];
+    [self.view addGestureRecognizer:pan];
     
 }
 
-- (void)buttonAction {
-//    UIAttachmentBehavior *attachment = [[UIAttachmentBehavior alloc] initWithItem:self.animationView attachedToAnchor:CGPointMake(100, 300)];
-    UIAttachmentBehavior *attachment = [UIAttachmentBehavior pinAttachmentWithItem:self.animationView attachedToItem:self.relyView attachmentAnchor:CGPointMake(100, 100)];
+
+- (void)panGestureAction:(UIPanGestureRecognizer *)panGesture {
+    
+    if (panGesture.state == UIGestureRecognizerStateBegan) {
+        [self.animator removeAllBehaviors];
+        [self.animator addBehavior:self.attachment];
+    }
+    if (panGesture.state == UIGestureRecognizerStateChanged) {
+        CGPoint touchPoint = [panGesture locationInView:self.view];
+        self.attachment.anchorPoint = touchPoint;
+    }
+}
+
+- (void)leftAction {
+    [self.animator removeAllBehaviors];
+    self.animationView.frame = CGRectMake(100, 200, 100, 100);
+    
+    UIAttachmentBehavior *attachment = [[UIAttachmentBehavior alloc] initWithItem:self.animationView attachedToAnchor:CGPointMake(100, 500)];
     attachment.damping = 0.3f;
     attachment.frequency = 0.8f;
     attachment.length = 100.f;
+    
     [self.animator addBehavior:attachment];
-    
-    
 }
 
-- (void)buttonAction2 {
+- (void)rightAction {
+    
+    [self.animator removeAllBehaviors];
+    self.animationView.frame = CGRectMake(100, 200, 100, 100);
+    self.relyView.frame = CGRectMake(250, 200, 100, 100);
+    [self.view layoutIfNeeded];
+    
     UIAttachmentBehavior *attachment = [[UIAttachmentBehavior alloc] initWithItem:self.animationView attachedToItem:self.relyView];
-    attachment.damping = 0.3f;
-    attachment.frequency = 2.f;
-    attachment.length = 100.f;
+//    UIAttachmentBehavior *attachment = [UIAttachmentBehavior pinAttachmentWithItem:self.animationView attachedToItem:self.relyView attachmentAnchor:CGPointMake(1000, 1000)];
+    
+    attachment.damping = 0.5;
+    attachment.frequency = 1.f;
+    attachment.length = 80;
+    attachment.action = ^{
+        NSLog(@"%@",NSStringFromCGRect(self.animationView.frame));
+    };
     [self.animator addBehavior:attachment];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

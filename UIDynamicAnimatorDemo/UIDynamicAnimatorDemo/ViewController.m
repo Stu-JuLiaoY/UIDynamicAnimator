@@ -12,11 +12,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) UIAttachmentBehavior *attachment;
-
 @property (nonatomic, strong) UIView *animationView;
-
-@property (nonatomic, strong) UIDynamicAnimator *animator;
 
 @property (nonatomic, strong) NSArray *dataSource;
 
@@ -37,9 +33,9 @@
     self.dataSource = @[@{@"title":@"Attachment Animation",@"viewController":@"AttachmentViewController"},
                         @{@"title":@"Gravity",@"viewController":@"GravityViewController"},
                         @{@"title":@"Collision",@"viewController":@"CollisionViewController"},
-                        @{@"title":@"DynamicItem",@"viewController":@"DynamicItemViewController"},
                         @{@"title":@"Push",@"viewController":@"PushViewController"},
                         @{@"title":@"Snap",@"viewController":@"SnapViewController"},
+                        @{@"title":@"DynamicItem",@"viewController":@"DynamicItemViewController"},
                         @{@"title":@"BasketBallView",@"viewController":@"BasketBallViewController"}];
 }
 
@@ -57,13 +53,6 @@
     Class cls = NSClassFromString([self.dataSource[indexPath.row] objectForKey:@"viewController"]);
     UIViewController *vc = [[cls alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (IBAction)sendDidClicked:(id)sender {
-    NSLog(@"%d",[NSThread isMainThread]);
-   
-    [self.animator addBehavior:self.attachment];
-
 }
 
 - (void)didReceiveMemoryWarning {

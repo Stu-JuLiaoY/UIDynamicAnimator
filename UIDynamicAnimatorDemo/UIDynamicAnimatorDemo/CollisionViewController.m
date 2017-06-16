@@ -19,14 +19,15 @@
     // Do any additional setup after loading the view.
 }
 
-- (void)buttonAction {
-    [super buttonAction];
+- (void)animate {
+    [super animate];
     
     UICollisionBehavior *collision = [[UICollisionBehavior alloc] initWithItems:@[self.animationView]];
     collision.translatesReferenceBoundsIntoBoundary = YES;
     collision.collisionDelegate = self;
-    collision.collisionMode = UICollisionBehaviorModeBoundaries;
-    [collision setTranslatesReferenceBoundsIntoBoundaryWithInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+    [collision addBoundaryWithIdentifier:@"twoPoint" fromPoint:CGPointMake(0, 500) toPoint:CGPointMake(500, 700)];
+//    collision.collisionMode = UICollisionBehaviorModeItems;
+//    [collision setTranslatesReferenceBoundsIntoBoundaryWithInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
     [self.animator addBehavior:collision];
 }
 

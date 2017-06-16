@@ -24,24 +24,33 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)buttonAction {
-    [super buttonAction];
+- (void)animate {
+    [super animate];
+    
+    // 移除重力的影响
+//    [self.animator removeAllBehaviors];
     
     UIDynamicItemBehavior *item = [[UIDynamicItemBehavior alloc] initWithItems:@[self.animationView]];
     // 弹力
-    item.elasticity = 0.7;
+    item.elasticity = 1.0;
     // 摩擦力
     item.friction = 0.0;
     // 密度
     item.density = 1.f;
-    item.charge = 1.f;
+    
+//    item.charge = 1.f;
 //    item.anchored = YES;
     // 阻力
-//    item.resistance = 0.f;
-    // 角距离
-    item.angularResistance = 10.f;
-    [item addAngularVelocity:1 forItem:self.animationView]; // 让物体旋转
+    item.resistance = 1.f;
+//    [item addAngularVelocity:1 forItem:self.animationView]; // 增加角速度
+    [item addLinearVelocity:CGPointMake(100, 200) forItem:self.animationView]; // 增加线速度，x: 横向距离，y: 纵向距离
+    item.allowsRotation = NO;
+    
+//    item.angularResistance = 0;
+
     [self.animator addBehavior:item];
+    
+    
 }
 
 /*

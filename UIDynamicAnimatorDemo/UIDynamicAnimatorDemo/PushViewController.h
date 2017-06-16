@@ -6,8 +6,8 @@
 //  Copyright © 2017年 Fangzhiwei Information Technology Co., Ltd. All rights reserved.
 //
 
-#import "AttachmentViewController.h"
+#import <UIKit/UIKit.h>
 
-@interface PushViewController : AttachmentViewController
+@interface PushViewController : UIViewController
 
 @end

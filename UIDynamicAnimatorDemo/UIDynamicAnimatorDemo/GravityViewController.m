@@ -20,11 +20,28 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(20, 80, 100, 40);
+    [btn setTitle:@"animate" forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(animate) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
     
+    self.animationView = [UIView new];
+    self.animationView.backgroundColor = [UIColor orangeColor];
+    self.animationView.frame = CGRectMake(0, 0, 100, 100);
+    self.animationView.center = CGPointMake(100, 300);
+    [self.view addSubview:self.animationView];
+    
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
 }
 
-- (void)buttonAction {
+- (void)animate {
+    self.animationView.center = CGPointMake(100, 300);
+    [self.animator removeAllBehaviors];
+    
     UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[self.animationView]];
+    gravity.gravityDirection = CGVectorMake(0, 1);
     gravity.magnitude = 1.f;
     [self.animator addBehavior:gravity];
     

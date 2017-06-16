@@ -18,6 +18,8 @@
 
 @property (nonatomic, strong) UIView *relyView;
 
-- (void)buttonAction;
+- (void)leftAction;
+
+- (void)rightAction;
 
 @end
